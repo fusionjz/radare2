@@ -5,6 +5,7 @@
 
 #define _GNU_SOURCE 1
 #define _LARGEFILE64_SOURCE 1
+#define _FILE_OFFSET_BITS 64
 
 #include "r_list.h"
 #include <r_util.h>

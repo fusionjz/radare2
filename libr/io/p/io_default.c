@@ -38,8 +38,11 @@ static int __io_posix_open(const char *file, int perm, int mode) {
 		fd = r_sandbox_open (file, O_RDONLY | O_BINARY, 0);
 	}
 #else
-	const int posixFlags = (perm & R_PERM_W) ? (perm & R_PERM_CREAT)
+	size_t posixFlags = (perm & R_PERM_W) ? (perm & R_PERM_CREAT)
 			? (O_RDWR | O_CREAT) : O_RDWR : O_RDONLY;
+#if __linux__
+	posixFlags |= O_LARGEFILE;
+#endif
 	fd = r_sandbox_open (file, posixFlags, mode);
 #endif
 	return fd;
