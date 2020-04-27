@@ -876,8 +876,6 @@ typedef enum {
 	R_ANAL_REF_TYPE_CODE = 'c', // code ref
 	R_ANAL_REF_TYPE_CALL = 'C', // code ref (call)
 	R_ANAL_REF_TYPE_DATA = 'd', // mem ref
-	R_ANAL_REF_TYPE_READ = 'r', // read mem ref
-	R_ANAL_REF_TYPE_WRTE = 'w', // write mem ref
 	R_ANAL_REF_TYPE_STRING='s'  // string ref
 } RAnalRefType;
 

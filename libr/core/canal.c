@@ -673,7 +673,6 @@ static int r_anal_analyze_fcn_refs(RCore *core, RAnalFunction *fcn, int depth) {
 		}
 		switch (ref->type) {
 		case R_ANAL_REF_TYPE_DATA:
-		case R_ANAL_REF_TYPE_READ:
 			if (core->anal->opt.followdatarefs) {
 				r_anal_try_get_fcn (core, ref, depth, 2);
 			}
@@ -3014,12 +3013,6 @@ static int fcn_print_detail(RCore *core, RAnalFunction *fcn) {
 			break;
 		case R_ANAL_REF_TYPE_DATA:
 			r_cons_printf ("axd 0x%"PFMT64x" 0x%"PFMT64x"\n", refi->addr, refi->at);
-			break;
-		case R_ANAL_REF_TYPE_READ:
-			r_cons_printf ("axr 0x%"PFMT64x" 0x%"PFMT64x"\n", refi->addr, refi->at);
-			break;
-		case R_ANAL_REF_TYPE_WRTE:
-			r_cons_printf ("axw 0x%"PFMT64x" 0x%"PFMT64x"\n", refi->addr, refi->at);
 			break;
 		case R_ANAL_REF_TYPE_CODE:
 			r_cons_printf ("axc 0x%"PFMT64x" 0x%"PFMT64x"\n", refi->addr, refi->at);
