@@ -1004,24 +1004,22 @@ static void list_vars2(RCore *core, RAnalFunction *fcn, int type) {
 	}
 	RList *list = r_anal_var_all_list (core->anal, fcn);
 	r_list_foreach (list, iter, var) {
-		r_cons_printf ("%10s  ", var->name);
-		const char *n;
-		RList *l = var_accesses_list2 (core->anal, fcn, var->delta, "reads");
-		r_list_foreach (l, iter, n) {
-			eprintf ("pid 1 @ %s\n", n);
-			eprintf ("pre\n");
-			r_core_cmdf (core, "pid 1 @ %s", n);
-			eprintf ("pos\n");
+		r_cons_printf ("* %s\n", var->name);
+		RAnalVarAccess *acc;
+		r_vector_foreach (&var->accesses, acc) {
+			if (!(acc->type & R_ANAL_VAR_ACCESS_TYPE_READ)) {
+				continue;
+			}
+			r_cons_printf ("R 0x%"PFMT64x"  ", (ut64)((st64)fcn->addr + acc->offset));
+			r_core_cmdf (core, "pi 1 @ 0x%08"PFMT64x, fcn->addr + acc->offset);
 		}
-r_cons_printf("%d\n", r_list_length (l));
-continue;
-		r_list_free (l);
-		l = var_accesses_list2 (core->anal, fcn, var->delta, "writes");
-		r_list_foreach (l, iter, n) {
-			eprintf ("pid 1 @ %s\n", n);
-			r_core_cmdf (core, "pid 1 @ %s", n);
+		r_vector_foreach (&var->accesses, acc) {
+			if (!(acc->type & R_ANAL_VAR_ACCESS_TYPE_WRITE)) {
+				continue;
+			}
+			r_cons_printf ("W 0x%"PFMT64x"  ", (ut64)((st64)fcn->addr + acc->offset));
+			r_core_cmdf (core, "pi 1 @ 0x%08"PFMT64x, fcn->addr + acc->offset);
 		}
-		r_list_free (l);
 	}
 }
 
